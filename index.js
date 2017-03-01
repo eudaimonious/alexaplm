@@ -24,7 +24,9 @@ var handlers = {
         }
         console.log(this.event.request);
         console.log(this.event.request.intent);
+        console.log(moodName);
         var speechOutput = "Glad to hear you're feeling " + moodName + ".";
+        console.log(speechOutput);
         this.emit(':tellWithCard', speechOutput, "AlexaPLM", moodName);
     },
     'GetDrugIntent': function () {
