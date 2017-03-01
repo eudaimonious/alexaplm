@@ -29,21 +29,21 @@ var handlers = {
         console.log(speechOutput);
         this.emit(':tellWithCard', speechOutput, "AlexaPLM", moodName);
     },
-    'GetDrugIntent': function () {
-        console.log(this.event.request.intent)
-        var drugSlot = this.event.request.intent.slots.RxDrug;
-        var drugName;
-        if (drugSlot && drugSlot.value) {
-            drugName = drugSlot.value.toLowerCase();
-            var _this = this;
-            request('http://patientslikeme.com/api/public/treatments/279', function (error, response, body) {
-              var body = JSON.parse(body);
-              var short_definition = body["treatment"]["short_definition"];
-              // console.log(short_definition) you can see logs in Monitoring -> View logs in CloudWatch
-              _this.emit(':tell', short_definition);
-            })
-        }
-    },
+    // 'GetDrugIntent': function () {
+    //     console.log(this.event.request.intent)
+    //     var drugSlot = this.event.request.intent.slots.RxDrug;
+    //     var drugName;
+    //     if (drugSlot && drugSlot.value) {
+    //         drugName = drugSlot.value.toLowerCase();
+    //         var _this = this;
+    //         request('http://patientslikeme.com/api/public/treatments/279', function (error, response, body) {
+    //           var body = JSON.parse(body);
+    //           var short_definition = body["treatment"]["short_definition"];
+    //           // console.log(short_definition) you can see logs in Monitoring -> View logs in CloudWatch
+    //           _this.emit(':tell', short_definition);
+    //         })
+    //     }
+    // },
     'AMAZON.HelpIntent': function () {
         var speechOutput = "You can say, tell me about gabapentin, or, you can say exit... What can I help you with?";
         var reprompt = "What can I help you with?";
