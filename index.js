@@ -12,7 +12,7 @@ exports.handler = function(event, context, callback) {
 
 var handlers = {
     'LaunchRequest': function () {
-        this.emit(CreateInstantMe)
+        this.emit('CreateInstantMe')
     },
     'CreateInstantMe': function() {
         this.emit(':ask', "How are you feeling today?");
@@ -21,7 +21,7 @@ var handlers = {
         if (moodSlot && moodSlot.value) {
             moodName = moodSlot.value.toLowerCase();
         }
-
+        this.emit(':tell', "Glad to hear you're feeling " + moodName + ".");
     },
     'GetDrugIntent': function () {
         console.log(this.event.request.intent)
@@ -30,7 +30,6 @@ var handlers = {
         if (drugSlot && drugSlot.value) {
             drugName = drugSlot.value.toLowerCase();
         }
-
         var _this = this;
         request('http://patientslikeme.com/api/public/treatments/279', function (error, response, body) {
           var body = JSON.parse(body);
