@@ -15,8 +15,8 @@ var handlers = {
         this.emit('CreateInstantMe')
     },
     'CreateInstantMe': function() {
-        this.emit(':ask', "How are you feeling today?");
         console.log("create instant me slots", this.event.request.intent.slots);
+        this.emit(':ask', "How are you feeling today?", "You can say good, very good, neutral, bad or very bad.", true);
         // var moodSlot = this.event.request.intent.slots.Mood;
         // var moodName;
         // if (moodSlot && moodSlot.value) {
@@ -33,14 +33,14 @@ var handlers = {
         var drugName;
         if (drugSlot && drugSlot.value) {
             drugName = drugSlot.value.toLowerCase();
+            var _this = this;
+            request('http://patientslikeme.com/api/public/treatments/279', function (error, response, body) {
+              var body = JSON.parse(body);
+              var short_definition = body["treatment"]["short_definition"];
+              // console.log(short_definition) you can see logs in Monitoring -> View logs in CloudWatch
+              _this.emit(':tell', short_definition);
+            })
         }
-        var _this = this;
-        request('http://patientslikeme.com/api/public/treatments/279', function (error, response, body) {
-          var body = JSON.parse(body);
-          var short_definition = body["treatment"]["short_definition"];
-          // console.log(short_definition) you can see logs in Monitoring -> View logs in CloudWatch
-          _this.emit(':tell', short_definition);
-        })
     },
     'AMAZON.HelpIntent': function () {
         var speechOutput = "You can say, tell me about gabapentin, or, you can say exit... What can I help you with?";
