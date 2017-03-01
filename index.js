@@ -15,13 +15,21 @@ var handlers = {
         this.emit('CreateInstantMe')
     },
     'CreateInstantMe': function() {
+        let options = {  
+            url: 'https://8a6002f5.ngrok.io/api/v1/instant_mes/alexa_create',
+            form: {
+                email: 'me@example.com',
+                password: 'myPassword'
+            }
+        };
+
+        request.post(options, callback);
         console.log("create instant me slots", this.event.request.intent.slots);
         var moodSlot = this.event.request.intent.slots.Mood;
         var moodName;
         if (moodSlot && moodSlot.value) {
             moodName = moodSlot.value.toLowerCase();
         }
-        request.post('http://8a6002f5.ngrok.io/api/v1/instant_mes/alexa_create', {foo: 'bar'});
         this.emit(':ask', "How are you feeling today?", "You can say good, very good, neutral, bad or very bad.", true);
         
         console.log(this.event.request);
