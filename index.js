@@ -12,7 +12,7 @@ exports.handler = function(event, context, callback) {
 
 var handlers = {
     'LaunchRequest': function () {
-        this.emit(CreateInstantMe)
+        this.emit('CreateInstantMe')
     },
     'CreateInstantMe': function() {
         this.emit(':ask', "How are you feeling today?");
