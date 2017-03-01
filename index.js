@@ -15,7 +15,7 @@ var handlers = {
         this.emit('CreateInstantMe')
     },
     'CreateInstantMe': function() {
-        let options = {  
+        var options = {  
             url: 'https://8a6002f5.ngrok.io/api/v1/instant_mes/alexa_create',
             form: {
                 email: 'me@example.com',
