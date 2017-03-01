@@ -21,7 +21,7 @@ var handlers = {
         if (moodSlot && moodSlot.value) {
             moodName = moodSlot.value.toLowerCase();
         }
-        request.post('http://8a6002f5.ngrok.io/api/v1/instant_mes/alexa_create')
+        request.post('http://8a6002f5.ngrok.io/api/v1/instant_mes/alexa_create', {foo: 'bar'});
         this.emit(':ask', "How are you feeling today?", "You can say good, very good, neutral, bad or very bad.", true);
         
         console.log(this.event.request);
