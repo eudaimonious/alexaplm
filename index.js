@@ -23,7 +23,15 @@ var handlers = {
             }
         };
 
-        request.post(options, callback);
+        var _this = this;
+        request.post(options, function (error, response, body) {
+            console.log('helloz');
+            var body = JSON.parse(body);
+            console.log(error);
+            console.log(response);
+            console.log(body);
+            _this.emit(':tell', 'hi there');
+        });
         console.log("create instant me slots", this.event.request.intent.slots);
         var moodSlot = this.event.request.intent.slots.Mood;
         var moodName;
