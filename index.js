@@ -12,7 +12,16 @@ exports.handler = function(event, context, callback) {
 
 var handlers = {
     'LaunchRequest': function () {
+        this.emit(CreateInstantMe)
+    },
+    'CreateInstantMe': function() {
         this.emit(':ask', "How are you feeling today?");
+        var moodSlot = this.event.request.intent.slots.Mood;
+        var moodName;
+        if (moodSlot && moodSlot.value) {
+            moodName = moodSlot.value.toLowerCase();
+        }
+
     },
     'GetDrugIntent': function () {
         console.log(this.event.request.intent)
@@ -23,9 +32,7 @@ var handlers = {
         }
 
         var _this = this;
-        console.log(this.event)
-
-        request('http://6de02801.ngrok.io/api/public/treatments/279', function (error, response, body) {
+        request('http://patientslikeme.com/api/public/treatments/279', function (error, response, body) {
           var body = JSON.parse(body);
           var short_definition = body["treatment"]["short_definition"];
           // console.log(short_definition) you can see logs in Monitoring -> View logs in CloudWatch
@@ -42,5 +49,9 @@ var handlers = {
     },
     'AMAZON.StopIntent': function () {
         this.emit(':tell', 'Goodbye!');
+    },
+    'Unhandled': function() {
+        var message = 'Say yes to continue, or no to end the game.';
+        this.emit(':ask', message, message);
     }
 };
