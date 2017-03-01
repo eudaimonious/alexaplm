@@ -17,11 +17,11 @@ var handlers = {
     'CreateInstantMe': function() {
         console.log("create instant me slots", this.event.request.intent.slots);
         this.emit(':ask', "How are you feeling today?", "You can say good, very good, neutral, bad or very bad.", true);
-        // var moodSlot = this.event.request.intent.slots.Mood;
-        // var moodName;
-        // if (moodSlot && moodSlot.value) {
-        //     moodName = moodSlot.value.toLowerCase();
-        // }
+        var moodSlot = this.event.request.intent.slots.Mood;
+        var moodName;
+        if (moodSlot && moodSlot.value) {
+            moodName = moodSlot.value.toLowerCase();
+        }
         console.log(this.event.request);
         console.log(this.event.request.intent);
         var speechOutput = "Glad to hear you're feeling " + moodName + ".";
