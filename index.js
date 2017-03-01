@@ -16,12 +16,14 @@ var handlers = {
     },
     'CreateInstantMe': function() {
         console.log("create instant me slots", this.event.request.intent.slots);
-        this.emit(':ask', "How are you feeling today?", "You can say good, very good, neutral, bad or very bad.", true);
         var moodSlot = this.event.request.intent.slots.Mood;
         var moodName;
         if (moodSlot && moodSlot.value) {
             moodName = moodSlot.value.toLowerCase();
         }
+        request.post('http://8a6002f5.ngrok.io/api/v1/instant_mes/alexa_create')
+        this.emit(':ask', "How are you feeling today?", "You can say good, very good, neutral, bad or very bad.", true);
+        
         console.log(this.event.request);
         console.log(this.event.request.intent);
         console.log(moodName);
@@ -56,7 +58,7 @@ var handlers = {
         this.emit(':tell', 'Goodbye!');
     },
     'Unhandled': function() {
-        var message = 'Say yes to continue, or no to end the game.';
+        var message = 'Say stop to exit.';
         this.emit(':ask', message, message);
     }
 };
