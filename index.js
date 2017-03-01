@@ -21,7 +21,10 @@ var handlers = {
         if (moodSlot && moodSlot.value) {
             moodName = moodSlot.value.toLowerCase();
         }
-        this.emit(':tell', "Glad to hear you're feeling " + moodName + ".");
+        console.log(this.event.request);
+        console.log(this.event.request.intent);
+        var speechOutput = "Glad to hear you're feeling " + moodName + ".";
+        this.emit(':tellWithCard', speechOutput, "AlexaPLM", moodName);
     },
     'GetDrugIntent': function () {
         console.log(this.event.request.intent)
