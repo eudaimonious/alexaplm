@@ -2,6 +2,7 @@
 var Alexa = require("alexa-sdk");
 var APP_ID = "amzn1.ask.skill.46656ade-c839-4cee-a6ca-813b37a08443";
 var request = require("request");
+var axios = require("axios");
 
 exports.handler = function(event, context, callback) {
     var alexa = Alexa.handler(event, context);
@@ -15,23 +16,19 @@ var handlers = {
         this.emit('CreateInstantMe')
     },
     'CreateInstantMe': function() {
-        var options = {  
-            url: 'https://8a6002f5.ngrok.io/api/v1/instant_mes/alexa_create',
-            form: {
-                email: 'me@example.com',
-                password: 'myPassword'
-            }
-        };
-
-        var _this = this;
-        request.post(options, function (error, response, body) {
-            console.log('helloz');
-            var body = JSON.parse(body);
-            console.log(error);
+        console.log("about to use axios");
+        axios.post('https://8a6002f5.ngrok.io/api/v1/instant_mes/alexa_create', {
+            firstName: 'Fred',
+            lastName: 'Flintstone'
+          })
+          .then(function (response) {
             console.log(response);
-            console.log(body);
-            _this.emit(':tell', 'hi there');
-        });
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        console.log("hopefully axios was used");
+
         console.log("create instant me slots", this.event.request.intent.slots);
         var moodSlot = this.event.request.intent.slots.Mood;
         var moodName;
