@@ -1,4 +1,4 @@
 upload_cmd = "aws lambda update-function-code --zip-file fileb://#{`pwd`.chomp}/alexaplm.zip --function-name AlexaPLM"
 
-`zip -r alexaplm.zip node_modules index.js`
+`zip -r alexaplm.zip node_modules index.js treatments.json`
 `#{upload_cmd}`

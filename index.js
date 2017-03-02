@@ -4,6 +4,7 @@ var APP_ID = "amzn1.ask.skill.46656ade-c839-4cee-a6ca-813b37a08443";
 var request = require("request");
 var axios = require("axios");
 var _ = require("lodash");
+var treatmentsByName = require("./treatments.json");
 
 exports.handler = function(event, context, callback) {
     var alexa = Alexa.handler(event, context);
@@ -41,15 +42,20 @@ var handlers = {
         }
     },
     'GetDrugIntent': function () {
+        console.log(treatmentsByName);
         console.log(this.event.request.intent)
         var drugSlot = this.event.request.intent.slots.RxDrug;
         var drugName;
         if (drugSlot && drugSlot.value) {
             drugName = drugSlot.value.toLowerCase();
             var _this = this;
-            request('http://patientslikeme.com/api/public/treatments/279', function (error, response, body) {
+            var id = treatmentsByName[drugName];
+            console.log(id);
+            var url = 'http://8a6002f5.ngrok.io/api/public/treatments/' + id + '/alexa_show';
+            // var url = 'http://patientslikeme.com/api/public/treatments/' + id;
+            request(url, function (error, response, body) {
               var body = JSON.parse(body);
-              var short_definition = body["treatment"]["short_definition"];
+              var short_definition = body["treatment"];
               // console.log(short_definition) you can see logs in Monitoring -> View logs in CloudWatch
               _this.emit(':tell', short_definition);
             })
