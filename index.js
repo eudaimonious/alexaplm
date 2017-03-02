@@ -39,34 +39,22 @@ var handlers = {
                 this.emit('AMAZON.HelpIntent');
             }
         }
-
-
-
-        console.log("create instant me slots", this.event.request.intent.slots);
-        // this.emit(':ask', "How are you feeling today?", "You can say good, very good, neutral, bad or very bad.", true);
-        
-        console.log(this.event.request);
-        console.log(this.event.request.intent);
-        console.log(moodName);
-        var speechOutput = "Glad to hear you're feeling " + moodName + ".";
-        console.log(speechOutput);
-        // this.emit(':tellWithCard', speechOutput, "AlexaPLM", moodName);
     },
-    // 'GetDrugIntent': function () {
-    //     console.log(this.event.request.intent)
-    //     var drugSlot = this.event.request.intent.slots.RxDrug;
-    //     var drugName;
-    //     if (drugSlot && drugSlot.value) {
-    //         drugName = drugSlot.value.toLowerCase();
-    //         var _this = this;
-    //         request('http://patientslikeme.com/api/public/treatments/279', function (error, response, body) {
-    //           var body = JSON.parse(body);
-    //           var short_definition = body["treatment"]["short_definition"];
-    //           // console.log(short_definition) you can see logs in Monitoring -> View logs in CloudWatch
-    //           _this.emit(':tell', short_definition);
-    //         })
-    //     }
-    // },
+    'GetDrugIntent': function () {
+        console.log(this.event.request.intent)
+        var drugSlot = this.event.request.intent.slots.RxDrug;
+        var drugName;
+        if (drugSlot && drugSlot.value) {
+            drugName = drugSlot.value.toLowerCase();
+            var _this = this;
+            request('http://patientslikeme.com/api/public/treatments/279', function (error, response, body) {
+              var body = JSON.parse(body);
+              var short_definition = body["treatment"]["short_definition"];
+              // console.log(short_definition) you can see logs in Monitoring -> View logs in CloudWatch
+              _this.emit(':tell', short_definition);
+            })
+        }
+    },
     'AMAZON.HelpIntent': function () {
         this.emit('Unhandled');
     },
