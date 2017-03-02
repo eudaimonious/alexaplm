@@ -3,6 +3,7 @@ var Alexa = require("alexa-sdk");
 var APP_ID = "amzn1.ask.skill.46656ade-c839-4cee-a6ca-813b37a08443";
 var request = require("request");
 var axios = require("axios");
+var _ = require("lodash");
 
 exports.handler = function(event, context, callback) {
     var alexa = Alexa.handler(event, context);
@@ -13,32 +14,35 @@ exports.handler = function(event, context, callback) {
 
 var handlers = {
     'LaunchRequest': function () {
-        this.emit('CreateInstantMe')
+        this.emit(':ask', "How are you feeling today? For example, you can say, I'm feeling good!", "beep boop bop! I am a robot. Tee hee.")
+        // this.emit('CreateInstantMe');
     },
     'CreateInstantMe': function() {
-        console.log("about to use axios");
-        var _this = this;
-        axios.post('http://8a6002f5.ngrok.io/instant_mood/alexa_create', {
-            data: _this.event
-          })
-          .then(function (response) {
-            console.log("SUCCESS CALLBACK");
-            console.log(response);
-            _this.emit(':tellWithCard', 'success');
-          })
-          .catch(function (error) {
-            console.log("ERROR CALLBACK");
-            console.log(error);
-            _this.emit(':tellWithCard', 'error');
-          });
-        console.log("hopefully axios was used");
-
-        console.log("create instant me slots", this.event.request.intent.slots);
         var moodSlot = this.event.request.intent.slots.Mood;
         var moodName;
         if (moodSlot && moodSlot.value) {
             moodName = moodSlot.value.toLowerCase();
+            if (_.includes(['very good', 'good', 'neutral', 'bad', 'very bad'], moodName)) {
+                var _this = this;
+                axios.post('http://8a6002f5.ngrok.io/instant_mood/alexa_create', {
+                    data: _this.event
+                  })
+                  .then(function (response) {
+                    var message = 'OK. Your InstantMe update of ' + moodName + ' has been recorded.';
+                    _this.emit(':tellWithCard', message, "InstantMe Updated", message);
+                  })
+                  .catch(function (error) {
+                    var message = 'There was an error updating your InstantMe.';
+                    _this.emit(':tellWithCard', message, "InstantMe Update Failed", message);
+                  });
+            } else {
+                this.emit('AMAZON.HelpIntent');
+            }
         }
+
+
+
+        console.log("create instant me slots", this.event.request.intent.slots);
         // this.emit(':ask', "How are you feeling today?", "You can say good, very good, neutral, bad or very bad.", true);
         
         console.log(this.event.request);
@@ -64,9 +68,7 @@ var handlers = {
     //     }
     // },
     'AMAZON.HelpIntent': function () {
-        var speechOutput = "You can say, tell me about gabapentin, or, you can say exit... What can I help you with?";
-        var reprompt = "What can I help you with?";
-        this.emit(':ask', speechOutput, reprompt);
+        this.emit('Unhandled');
     },
     'AMAZON.CancelIntent': function () {
         this.emit(':tell', 'Goodbye!');
@@ -75,7 +77,7 @@ var handlers = {
         this.emit(':tell', 'Goodbye!');
     },
     'Unhandled': function() {
-        var message = 'Say stop to exit.';
+        var message = 'You can say, I\'m feeling very good, good, neutral, bad, or very bad.';
         this.emit(':ask', message, message);
     }
 };
