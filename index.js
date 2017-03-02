@@ -17,15 +17,19 @@ var handlers = {
     },
     'CreateInstantMe': function() {
         console.log("about to use axios");
-        axios.post('https://8a6002f5.ngrok.io/api/v1/instant_mes/alexa_create', {
-            firstName: 'Fred',
-            lastName: 'Flintstone'
+        var _this = this;
+        axios.post('http://8a6002f5.ngrok.io/instant_mood/alexa_create', {
+            data: _this.event
           })
           .then(function (response) {
+            console.log("SUCCESS CALLBACK");
             console.log(response);
+            _this.emit(':tellWithCard', 'success');
           })
           .catch(function (error) {
+            console.log("ERROR CALLBACK");
             console.log(error);
+            _this.emit(':tellWithCard', 'error');
           });
         console.log("hopefully axios was used");
 
@@ -35,14 +39,14 @@ var handlers = {
         if (moodSlot && moodSlot.value) {
             moodName = moodSlot.value.toLowerCase();
         }
-        this.emit(':ask', "How are you feeling today?", "You can say good, very good, neutral, bad or very bad.", true);
+        // this.emit(':ask', "How are you feeling today?", "You can say good, very good, neutral, bad or very bad.", true);
         
         console.log(this.event.request);
         console.log(this.event.request.intent);
         console.log(moodName);
         var speechOutput = "Glad to hear you're feeling " + moodName + ".";
         console.log(speechOutput);
-        this.emit(':tellWithCard', speechOutput, "AlexaPLM", moodName);
+        // this.emit(':tellWithCard', speechOutput, "AlexaPLM", moodName);
     },
     // 'GetDrugIntent': function () {
     //     console.log(this.event.request.intent)
