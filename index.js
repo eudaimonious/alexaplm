@@ -52,12 +52,10 @@ var handlers = {
             var id = treatmentsByName[drugName];
             console.log(id);
             var url = 'http://8a6002f5.ngrok.io/api/public/treatments/' + id + '/alexa_show';
-            // var url = 'http://patientslikeme.com/api/public/treatments/' + id;
             request(url, function (error, response, body) {
               var body = JSON.parse(body);
-              var short_definition = body["treatment"];
-              // console.log(short_definition) you can see logs in Monitoring -> View logs in CloudWatch
-              _this.emit(':tell', short_definition);
+              var shortDefinition = body["treatment"];
+              _this.emit(':tellWithCard', shortDefinition, drugName, shortDefinition);
             })
         }
     },
