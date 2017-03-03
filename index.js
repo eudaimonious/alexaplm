@@ -16,14 +16,13 @@ exports.handler = function(event, context, callback) {
 var handlers = {
     'LaunchRequest': function () {
         this.emit(':ask', "How are you feeling today? For example, you can say, I'm feeling good!", "beep boop bop! I am a robot. Tee hee.")
-        // this.emit('CreateInstantMe');
     },
     'CreateInstantMe': function() {
         var moodSlot = this.event.request.intent.slots.Mood;
         var moodName;
         if (moodSlot && moodSlot.value) {
             moodName = moodSlot.value.toLowerCase();
-            if (_.includes(['very good', 'good', 'neutral', 'bad', 'very bad'], moodName)) {
+            if (_.includes(['fucking great', 'fantastic', 'very good', 'good', 'neutral', 'bad', 'very bad', 'like crap', 'shitty'], moodName)) {
                 var _this = this;
                 axios.post('http://8a6002f5.ngrok.io/instant_mood/alexa_create', {
                     data: _this.event
@@ -41,9 +40,28 @@ var handlers = {
             }
         }
     },
+    'CreateInstantMeStory': function() {
+        var storySlot = this.event.request.intent.slots.InstantMeStory;
+        var story;
+        if (storySlot && storySlot.value) {
+            story = storySlot.value;
+            var _this = this;
+            axios.post('http://8a6002f5.ngrok.io/instant_mood/alexa_add_story', {
+                data: _this.event
+            })
+            .then(function (response) {
+                var message = 'I heard: ' + story + '. I\'ve added that to your InstantMe.';
+                _this.emit(':tellWithCard', message, "InstantMe Journal Added", message);
+            })
+            .catch(function (error) {
+                var message = 'There was an error adding a journal to your InstantMe.';
+                _this.emit(':tellWithCard', message, "InstantMe Journal Addition Failed", message);
+            })
+        } else {
+            this.emit('Sorry. Could you repeat that? Say Ask PatientsLikeMe to record my journal... then start speaking.');
+        }
+    },
     'GetDrugIntent': function () {
-        console.log(treatmentsByName);
-        console.log(this.event.request.intent)
         var drugSlot = this.event.request.intent.slots.RxDrug;
         var drugName;
         if (drugSlot && drugSlot.value) {
