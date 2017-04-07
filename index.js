@@ -24,7 +24,7 @@ var handlers = {
             moodName = moodSlot.value.toLowerCase();
             if (_.includes(['fucking great', 'fantastic', 'very good', 'good', 'neutral', 'bad', 'very bad', 'like crap', 'shitty'], moodName)) {
                 var _this = this;
-                axios.post('http://8a6002f5.ngrok.io/instant_mood/alexa_create', {
+                axios.post('https://stage:fluffy@wow-alexa.stage.patientslikeme.com/instant_mood/alexa_create', {
                     data: _this.event
                   })
                   .then(function (response) {
@@ -46,7 +46,7 @@ var handlers = {
         if (storySlot && storySlot.value) {
             story = storySlot.value;
             var _this = this;
-            axios.post('http://8a6002f5.ngrok.io/instant_mood/alexa_add_story', {
+            axios.post('https://stage:fluffy@wow-alexa.stage.patientslikeme.com/instant_mood/alexa_add_story', {
                 data: _this.event
             })
             .then(function (response) {
@@ -69,7 +69,7 @@ var handlers = {
             var _this = this;
             var id = treatmentsByName[drugName];
             console.log(id);
-            var url = 'http://8a6002f5.ngrok.io/api/public/treatments/' + id + '/alexa_show';
+            var url = 'https://stage:fluffy@wow-alexa.stage.patientslikeme.com/api/public/treatments/' + id + '/alexa_show';
             request(url, function (error, response, body) {
               var body = JSON.parse(body);
               var shortDefinition = body["treatment"];
